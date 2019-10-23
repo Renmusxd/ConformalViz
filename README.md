@@ -10,3 +10,7 @@ To run:
 - Navigate to new directory and run `cargo run --release` which will download the required libraries, build them all, and run the application.
 
 To zoom in/out use the up/down keys
+
+Example of 1/z with unit circle |z| = 1, x axis, and y axis in green. Then output unit square (|Re(w)|=1 or |Im(w)|=1) in white.
+
+![conformal](mapping.png)
