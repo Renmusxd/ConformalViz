@@ -12,6 +12,9 @@ use sdl2::render::Canvas;
 use sdl2::video::Window;
 use std::time::Duration;
 
+/// The mapping we want to apply is defined here. Return
+/// Some(value) if the mapping is successful, return None if it's
+/// not defined in the given region.
 fn conformal_mapping(c: Complex<f64>) -> Option<Complex<f64>> {
     if c != Complex::zero() {
         Some(Complex::<f64>::one() / c)
@@ -20,10 +23,12 @@ fn conformal_mapping(c: Complex<f64>) -> Option<Complex<f64>> {
     }
 }
 
+/// Use multithreading to map all the points in the slice.
 fn remap(grid: &[Complex<f64>]) -> Vec<Option<Complex<f64>>> {
     grid.par_iter().map(|c| conformal_mapping(*c)).collect()
 }
 
+/// Convert a complex value to a pixel coordinate on the screen.
 fn complex_to_point(
     c: &Option<Complex<f64>>,
     scale: f64,
@@ -39,6 +44,7 @@ fn complex_to_point(
     }
 }
 
+/// Draw the line if both points were computed successfully.
 fn draw_if_both(
     a: &Option<Point>,
     b: &Option<Point>,
@@ -52,6 +58,7 @@ fn draw_if_both(
     Ok(())
 }
 
+/// A type which stores possible connections to neighboring indices.
 type Connection = (
     usize,
     Option<usize>,
@@ -59,6 +66,8 @@ type Connection = (
     Option<usize>,
     Option<usize>,
 );
+
+/// Draw the whole mapped grid, and lines.
 fn draw_mapped_grid(
     grid_connections: &[Connection],
     mapped_grid: &[Option<Complex<f64>>],
@@ -118,6 +127,7 @@ fn draw_mapped_grid(
     }
 }
 
+/// Main function to set up the window and start the loop.
 pub fn main() -> Result<(), String> {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
